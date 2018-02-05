@@ -14,12 +14,6 @@ public class Console : MonoBehaviour
         if (FindObjectsOfType<Console>().Length > 1)
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
-
-        if (Debug.isDebugBuild)
-        {
-            Debug.Log("Debug build detected. Console on by default!");
-        }
-
     }
 
     public void Start()
@@ -31,6 +25,9 @@ public class Console : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.BackQuote))
             m_text.gameObject.SetActive(true);
+
+        if (Input.GetKey(KeyCode.F1))
+            Debug.LogError("sdfhgusdofgnh osufmhguiomfdsh guiosdfmhg usiofdmgh udsiofmg hufdsiomg hudsfiomg hsuiofdgm hsudio");
     }
 
     private void RecieveLogMessage(string message, string stacktrace, LogType logtype)

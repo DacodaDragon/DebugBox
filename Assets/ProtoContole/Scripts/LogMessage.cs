@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public delegate void TextUIUpdate(Text TextUI);
+public delegate void TextUIUpdate();
 
 public class LogMessage : MonoBehaviour
 {
@@ -92,7 +92,7 @@ public class LogMessage : MonoBehaviour
         // Start with aproperiate tag
         switch (type)
         {
-            case LogType.Error:     builder.Append("<color=red>[ERROR] ");      break;
+            case LogType.Error:     builder.Append("<color=#870c0c>[ERROR] ");      break;
             case LogType.Assert:    builder.Append("<color=red>[ASSERT] ");     break;
             case LogType.Warning:   builder.Append("<color=orange>[WARNING] "); break;
             case LogType.Log:       builder.Append("<color=white>[LOG] ");      break;
@@ -153,6 +153,7 @@ public class LogMessage : MonoBehaviour
     private void UpdateText()
     {
         m_textElement.text = m_formattedMessage;
-        OnTextUpdated?.Invoke(m_textElement);
+        if (OnTextUpdated != null)
+            OnTextUpdated();
     }
 }
