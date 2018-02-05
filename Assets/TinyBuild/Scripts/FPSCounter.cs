@@ -26,7 +26,7 @@ namespace tinyBuild.UI
 
         public void Start()
         {
-            m_FpsList = new List<int>(m_sampleCount);
+            m_FpsList = new List<int>(0);
         }
 
         public void Update()
