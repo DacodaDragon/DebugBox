@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 70d570c8837c5994ba5c986962a69981
-timeCreated: 1517694620
+guid: 8a05dbc01083de14b8e1e79079c6a0e3
+timeCreated: 1517831523
 licenseType: Free
 TrueTypeFontImporter:
   serializedVersion: 4
@@ -8,15 +8,15 @@ TrueTypeFontImporter:
   forceTextureCase: -2
   characterSpacing: 0
   characterPadding: 1
-  includeFontData: 0
-  fontName: Fixedsys Excelsior 3.01
+  includeFontData: 1
+  fontName: Calibri
   fontNames:
-  - Fixedsys Excelsior 3.01
+  - Calibri
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 2
-  ascentCalculationMode: 0
-  useLegacyBoundsCalculation: 1
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
