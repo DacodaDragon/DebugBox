@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 
 public class Console : MonoBehaviour
 {
@@ -26,22 +27,33 @@ public class Console : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.BackQuote))
             m_text.gameObject.SetActive(true);
 
-        if (Input.GetKey(KeyCode.F1))
-            Debug.LogError("sdfhgusdofgnh osufmhguiomfdsh guiosdfmhg usiofdmgh udsiofmg hufdsiomg hudsfiomg hsuiofdgm hsudio");
+
+        if (Input.GetKey(KeyCode.F3))
+            for (int i = 0; i < 10; i++)
+            {
+                Debug.LogError("first error about nullreference");
+                Debug.LogError("second error about out of range stuff");
+                Debug.LogError("third error wow");
+                Debug.LogError("fourth error out of pixel bound idunno");
+            }
     }
 
     private void RecieveLogMessage(string message, string stacktrace, LogType logtype)
     {
         if (m_collapse)
-        foreach (LogMessage log in m_messageElements)
         {
-            if (message.GetHashCode() == log.messageHash && log.gameObject.activeInHierarchy)
+            int hash = message.GetHashCode() + stacktrace.GetHashCode();
+            foreach (LogMessage log in m_messageElements)
             {
-                log.Repeat();
-                return;
+                if (hash == log.messageHash && log.gameObject.activeInHierarchy)
+                {
+                    log.Repeat();
+                    return;
+                }
             }
         }
-        m_messageElements[m_logIndex].ShowNewMessage(message, logtype);
+        
+        m_messageElements[m_logIndex].ShowNewMessage(message, stacktrace, logtype);
         ++m_logIndex;
         if (m_logIndex >= m_messageElements.Count)
             m_logIndex = 0;
