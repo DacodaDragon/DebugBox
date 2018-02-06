@@ -29,7 +29,10 @@ namespace ProtoBox.Console
 
         public void Add(string command)
         {
-            m_history.Add(command);
+            if (m_history.Count == 0)
+                m_history.Add(command);
+            if (m_history[m_history.Count-1] != command)
+                m_history.Add(command);
             m_index = m_history.Count - 1;
         }
     }

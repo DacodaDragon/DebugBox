@@ -6,7 +6,7 @@ public class Console : MonoBehaviour
 {
     [SerializeField] private List<LogMessage> m_messageElements;
     [SerializeField] bool m_collapse;
-    [SerializeField] ConsoleText m_text;
+    [SerializeField] ConsoleInput m_text;
     private int m_logIndex = 0;
 
     public void Awake()
@@ -19,6 +19,7 @@ public class Console : MonoBehaviour
     public void Start()
     { 
         Application.logMessageReceived += RecieveLogMessage;
+        Debug.Log("DACODA CONSOLE. Press \"~\" to open the console. Type help for a list of available commands.");
     }
 
     public void Update()

@@ -5,7 +5,7 @@ using System.Text;
 namespace ProtoBox.Console
 {
     [RequireComponent(typeof(Text))]
-    public class ConsoleText : MonoBehaviour
+    public class ConsoleInput : MonoBehaviour
     {
         private enum CaretDirection
         {
@@ -190,7 +190,7 @@ namespace ProtoBox.Console
                 if (c == '\n' || c == '\r')
                 {
                     Submit();
-                    continue;
+                    break;
                 }
 
                 if (c == '\b')

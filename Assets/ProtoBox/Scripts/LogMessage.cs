@@ -96,10 +96,10 @@ public class LogMessage : MonoBehaviour
         switch (type)
         {
             case LogType.Error: builder.Append("<color=#b70e0e>[ERROR] "); break;
-            case LogType.Assert: builder.Append("<color=red>[ASSERT] "); break;
+            case LogType.Assert: builder.Append("<color=#b70e0e>[ASSERT] "); break;
+            case LogType.Exception: builder.Append("<color=#b70e0e>[EXCEPTION] "); break;
             case LogType.Warning: builder.Append("<color=orange>[WARNING] "); break;
             case LogType.Log: builder.Append("<color=white>[LOG] "); break;
-            case LogType.Exception: builder.Append("<color=red>[EXCEPTION] "); break;
         }
 
         // Add what frame it starts
