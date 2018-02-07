@@ -17,7 +17,7 @@ namespace ProtoBox.Console
             commands.Add(new ScreenCommands());
             commands.Add(new GraphicsCommands());
             commands.Add(new SceneCommand());
-
+            commands.Add(new TimeCommands());
         }
 
         public void Submit(string command)

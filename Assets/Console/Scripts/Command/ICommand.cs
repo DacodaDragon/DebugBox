@@ -74,7 +74,7 @@ namespace ProtoBox.Console.Commands
         protected float ParseFloat(string value)
         {
             float num;
-            Assert(float.TryParse(value, out num), string.Format(ERR_PARSE_FLT, value));
+            Assert(!float.TryParse(value, out num), string.Format(ERR_PARSE_FLT, value));
             return num;
         }
 
@@ -106,6 +106,43 @@ namespace ProtoBox.Console.Commands
         public ConsoleCommand()
         {
             HashedName = Name.GetHashCode();
+        }
+    }
+
+
+    public class TimeCommands : ConsoleCommand
+    {
+        public override string Name
+        {
+            get
+            {
+                return "time";
+            }
+        }
+
+        public override string HelpText
+        {
+            get
+            {
+                return "Help not yet implemented";
+            }
+        }
+
+        public override void Run(params string[] args)
+        {
+            switch (args[1])
+            {
+                case "step":
+                case "s":
+                    SetTimeScale(args);
+                    return;
+            }
+        }
+
+        private void SetTimeScale(string[] args)
+        {
+            Assert(args.Length < 3, ERR_INVALID_ARG_COUNT);
+            Time.timeScale = ParseFloat(args[2]);
         }
     }
 }

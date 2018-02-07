@@ -7,19 +7,22 @@ namespace tinyBuild.UI
 {
     public class FPSCounter : MonoBehaviour
     {
-        [SerializeField] private Text m_FPS;
-        [SerializeField] private Text m_Average;
-        [SerializeField] private Text m_Min;
-        [SerializeField] private Text m_Max;
-        [SerializeField] private Text m_MS;
-        [SerializeField] private Text m_TimeStep;
-
-        // Index of min and max to reduce lookup time.
-        [SerializeField] private int m_minIndex;
-        [SerializeField] private int m_maxIndex;
+        [SerializeField]
+        private Text m_FPS;
+        [SerializeField]
+        private Text m_Average;
+        [SerializeField]
+        private Text m_Min;
+        [SerializeField]
+        private Text m_Max;
+        [SerializeField]
+        private Text m_MS;
+        [SerializeField]
+        private Text m_TimeStep;
 
         [Tooltip("Amount of frames to sample")]
-        [SerializeField] private int m_sampleCount;
+        [SerializeField]
+        private int m_sampleCount;
 
         private int m_framePointer;
         private List<int> m_FpsList;
@@ -60,10 +63,8 @@ namespace tinyBuild.UI
         private void FetchAndUpdate()
         {
             // Fetch data and update text elements
-            if (m_minIndex == m_framePointer)
-                m_Min.text = FetchMin().ToString();
-            if (m_maxIndex == m_framePointer)
-                m_Max.text = FetchMax().ToString();
+            m_Min.text = FetchMin().ToString();
+            m_Max.text = FetchMax().ToString();
             m_FPS.text = m_FpsList[m_framePointer].ToString();
             m_Average.text = FetchAverage().ToString();
             m_MS.text = FetchMS().ToString("##.##");
@@ -72,16 +73,12 @@ namespace tinyBuild.UI
 
         private int FetchMin()
         {
-            int min = m_FpsList.Min();
-            m_minIndex = m_FpsList.IndexOf(min);
-            return min;
+            return m_FpsList.Min();
         }
 
         private int FetchMax()
         {
-            int max = m_FpsList.Max();
-            m_minIndex = m_FpsList.IndexOf(max);
-            return max;
+            return m_FpsList.Max();
         }
 
         private int FetchAverage()
