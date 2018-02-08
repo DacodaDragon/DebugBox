@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 
@@ -18,12 +19,13 @@ namespace ProtoBox.Console.Commands
         protected const string ERR_PARSE_DOU = "failed parsing \"{0}\" to double";
         protected const string ERR_PARSE_LON = "failed parsing \"{0}\" to long";
         protected const string ERR_PARSE_BOO = "failed parsing \"{0}\" to bool";
+        protected const string ERR_PARSE_ENU = "failed parsing \"{0}\" to \"{1}\" enum";
+        protected const string ERR_NOT_ENUM = "failed internally. type \"{0}\" isn't an enumerator!";
 
-        public virtual string Name { get; }
+        public virtual string Name { get; protected set; }
         public virtual int HashedName { get; protected set; }
-        public virtual string HelpText { get; }
-        public virtual SubCommand[] Commands { get; }
-
+        public virtual string HelpText { get; protected set; }
+        public virtual SubCommand[] Commands { get; protected set; }
 
         /// <summary>
         /// Executes commands
@@ -105,7 +107,6 @@ namespace ProtoBox.Console.Commands
             if (string.IsNullOrEmpty(HelpText))
                 Fail(string.Format(ERR_NOT_IMPLEMENTED, Name));
             Debug.Log(HelpText);
-
         }
 
         /// <summary>
@@ -135,7 +136,7 @@ namespace ProtoBox.Console.Commands
         /// parses string to double
         /// </summary>
         /// <param name="value">string to parse</param>
-        /// <returns>parsed double</returns>
+        /// <returns>parsed double</rseturns>
         protected double ParseDouble(string value)
         {
             double num;
@@ -198,6 +199,35 @@ namespace ProtoBox.Console.Commands
         }
 
         /// <summary>
+        /// Converts string input to enum
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        protected T StringToEnum<T>(string arg) 
+        {
+            Type type = typeof(T);
+
+            Assert(!type.IsEnum, string.Format(ERR_NOT_ENUM, type.Name));
+            
+            string[] names = Enum.GetNames(type);
+
+            bool success = false;
+            for (int i = 0; i < names.Length; i++)
+            {
+                if (arg.Equals(names[i],StringComparison.OrdinalIgnoreCase))
+                {
+                    arg = names[i];
+                    success = true;
+                    break;
+                }
+            }
+
+            Assert(!success, string.Format(ERR_INVALID_ARG, arg, FormatMultiple(names)));
+            return (T)TypeDescriptor.GetConverter(type).ConvertFromString(arg);
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public ConsoleCommand()
@@ -205,7 +235,6 @@ namespace ProtoBox.Console.Commands
             HashedName = Name.GetHashCode();
         }
     }
-
 
     public class TimeCommands : ConsoleCommand
     {

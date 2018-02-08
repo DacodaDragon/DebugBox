@@ -1,5 +1,4 @@
 ﻿using System;
-
 using System.Linq;
 
 namespace ProtoBox.Console.Commands
@@ -49,7 +48,7 @@ namespace ProtoBox.Console.Commands
             if (parameters != null)
             for (int i = 0; i < parameters.Length; i++)
             {
-                sb.Append(parameters[i].type.Name).Append(' ');
+                sb.Append(parameters[i].FormattedString()).Append(' ');
             }
 
             // return formatted commandhelp
@@ -58,9 +57,8 @@ namespace ProtoBox.Console.Commands
 
         public void Execute(string[] args)
         {
-            
             if (execFunc == null)
-                throw new Exception("Subcommand not found!");
+                throw new Exception("No method assigned to subcommand!");
             execFunc.Invoke(args);
         }
 
@@ -69,37 +67,7 @@ namespace ProtoBox.Console.Commands
             this.name = name;
             this.subnames = subnames;
             this.parameters = parameters;
-            this.execFunc = func;
-        }
-    }
-
-    public class Param
-    {
-        public string Name { get; private set; }
-        public bool isFloat { get; private set; }
-        public bool isBool { get; private set; }
-        public bool isString { get; private set; }
-        public bool isEnum { get; private set; }
-
-        public Type type;
-
-        public string FormattedString()
-        {
-            return "<" + type.Name + ":" + Name + ">";
-        }
-
-        public Param(Type type, string name)
-        {
-            isFloat = (type == typeof(float));
-            isString = (type == typeof(string));
-            isBool = (type == typeof(bool));
-            isEnum = (type == typeof(Enum));
-            this.type = type;
-
-            if (isFloat || isString || isBool || isEnum)
-            {
-                throw new Exception("Invalid type \"" + type.Name + "\" in \"" + name + "\"");
-            }
+            this.execFunc = func; 
         }
     }
 }
