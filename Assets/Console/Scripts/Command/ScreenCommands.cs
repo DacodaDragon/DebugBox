@@ -17,7 +17,7 @@ screen fps <targetfps>";
             }
         }
 
-        public override void Run(params string[] args)
+        public override void Execute(params string[] args)
         {
             Assert(args.Length == 1, ERR_INVALID_ARG_COUNT);
             
@@ -73,68 +73,16 @@ screen fps <targetfps>";
 
     public class GraphicsCommands : ConsoleCommand
     {
-        public override string Name
-        {
-            get { return "graphics"; }
-        }
+        private SubCommand[] m_commands;
 
-        public override string HelpText
+        public override string Name { get { return "graphics"; } }
+
+        public override SubCommand[] Commands
         {
             get
             {
-                return @" List of available commands:
-graphics [vsync, sync, v] <bool>
-graphics [antialiasing, aa] <int>
-graphics [shadowquality, shadow, s] <shadowquality>
-graphics [quality, q] <int>
-graphics [qualityincrease, qi]
-graphics [qualitydecrease, qd]";
+                return m_commands;
             }
-        }
-
-        public override void Run(params string[] args)
-        {
-            Assert(args.Length < 2, ERR_INVALID_ARG_COUNT);
-            switch (args[1])
-            {
-                case "aa":
-                case "antialiasing":
-                    SetAA(args);
-                    return;
-
-                case "sync":
-                case "vsync":
-                case "v":
-                    SetVSync(args);
-                    return;
-
-                case "shadow":
-                case "shadows":
-                case "shadowquality":
-                case "s":
-                    SetShadowQuality(args);
-                    return;
-
-                case "quality":
-                case "qualitylevel":
-                case "q":
-                    SetQualityLevel(args[2]);
-                    return;
-
-                case "qualityincrease":
-                case "qualityi":
-                case "qi":
-                    IncreaseQualityLevel();
-                    return;
-
-                case "qualitydecrease":
-                case "qualityd":
-                case "qd":
-                    DecreaseQualityLevel();
-                    return;
-            }
-
-            Fail(ERR_INVALID_SUBCOMMAND);
         }
 
         private void SetAA(string[] args)
@@ -144,7 +92,7 @@ graphics [qualitydecrease, qd]";
 
         private void SetVSync(string[] args)
         {
-            QualitySettings.antiAliasing = ParseInt(args[2]);
+            QualitySettings.vSyncCount = ParseInt(args[2]);
         }
 
         private void SetShadowQuality(string[] args)
@@ -159,19 +107,19 @@ graphics [qualitydecrease, qd]";
             
         }
 
-        private void SetQualityLevel(string args)
+        private void SetQualityLevel(string[] args)
         {
-            QualitySettings.SetQualityLevel(ParseInt(args), true);
+            QualitySettings.SetQualityLevel(ParseInt(args[2]), true);
             Debug.Log("Quality set to: \"" + QualitySettings.names[QualitySettings.GetQualityLevel()] + "\"");
         }
 
-        private void IncreaseQualityLevel()
+        private void IncreaseQualityLevel(string[] args)
         {
             QualitySettings.IncreaseLevel(true);
             Debug.Log("Quality set to: \"" + QualitySettings.names[QualitySettings.GetQualityLevel()] + "\"");
         }
 
-        private void DecreaseQualityLevel()
+        private void DecreaseQualityLevel(string[] args)
         {
             QualitySettings.DecreaseLevel(true);
             Debug.Log("Quality set to: \"" + QualitySettings.names[QualitySettings.GetQualityLevel()] + "\"");
@@ -199,6 +147,19 @@ graphics [qualitydecrease, qd]";
                 case "force": return AnisotropicFiltering.ForceEnable;
                 default: return AnisotropicFiltering.Disable;
             }
+        }
+
+        public GraphicsCommands()
+        {
+            m_commands = new SubCommand[]
+            {
+                new SubCommand("setaa",                 new string[] { "aa" },                             new Param[] { new Param(typeof(int),           "AntiAliasing level") }, SetAA),
+                new SubCommand("setvsync",              new string[] { "vsync", "v" },                     new Param[] { new Param(typeof(int),           "vsync count") }, SetVSync),
+                new SubCommand("setshadowquality",      new string[] { "shadowquality", "shadow", "shq" }, new Param[] { new Param(typeof(ShadowQuality), "ShadowQuality") }, SetShadowQuality),
+                new SubCommand("setqualitylevel",       new string[] { "qualitylevel", "quality", "q" },   new Param[] { new Param(typeof(int),           "Quality Level") }, SetShadowQuality),
+                new SubCommand("increasequalitylevel",  new string[] { "increasequality", "iq" },          null , IncreaseQualityLevel),
+                new SubCommand("decreasequalitylevel",  new string[] { "decreasequality", "dq" },          null , DecreaseQualityLevel)
+            };
         }
     }
 }

@@ -10,7 +10,7 @@ namespace ProtoBox.Console.Commands
         public override string Name { get { return "scene"; } }
         public override string HelpText { get { return base.HelpText;  } }
 
-        public override void Run(params string[] args)
+        public override void Execute(params string[] args)
         {
             Assert(args.Length < 2, ERR_INVALID_ARG_COUNT);
 
@@ -56,7 +56,7 @@ namespace ProtoBox.Console.Commands
         public override string Name { get { return "quit"; } }
         public override string HelpText { get { return "quits the application"; } }
 
-        public override void Run(params string[] args)
+        public override void Execute(params string[] args)
         {
             Application.Quit();
         }
@@ -67,7 +67,7 @@ namespace ProtoBox.Console.Commands
         public override string Name { get { return "log"; } }
         //public override string HelpText { get { return string.Empty; } }
 
-        public override void Run(params string[] args)
+        public override void Execute(params string[] args)
         {
             Assert(args.Length <= 1, ERR_INVALID_ARG_COUNT);
             switch (args[1])

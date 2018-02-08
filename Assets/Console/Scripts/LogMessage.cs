@@ -5,6 +5,8 @@ public delegate void TextUIUpdate();
 
 public class LogMessage : MonoBehaviour
 {
+    public delegate void LogMessageUpdate(LogMessage context);
+
     public const float LIFETIME = 4f;
     private const string TIMESTAMP_FORMAT = "hh:mm:ss:ff";
     //public enum TimeFormat
@@ -37,6 +39,10 @@ public class LogMessage : MonoBehaviour
     public string formattedMessage { get { return m_formattedMessage; } }
     public int startFrame { get { return m_frame; } }
     public int endFrame { get { return m_frame; } }
+
+    public event LogMessageUpdate OnEnable;
+    public event LogMessageUpdate OnDisable;
+
     //public string    startTime { get { return m_timestamp; } }
     //public string    endTime { get { return m_maxTimestamp; } }
 
@@ -75,6 +81,9 @@ public class LogMessage : MonoBehaviour
         transform.SetAsLastSibling();
         UpdateText();
         gameObject.SetActive(true);
+
+        if (OnEnable != null)
+            OnEnable.Invoke(this);
     }
 
     public void Repeat()
@@ -134,12 +143,17 @@ public class LogMessage : MonoBehaviour
         return builder.Append(m_message).Append("</color>").ToString();
     }
 
-    private void Update()
+    public void ManualUpdate()
     {
         if (m_ignoreLifetime)
             return;
         if (Time.unscaledTime > m_time + LIFETIME)
+        {
             gameObject.SetActive(false);
+
+            if (OnEnable != null)
+                OnEnable.Invoke(this);
+        }
     }
 
     private void UpdateText()

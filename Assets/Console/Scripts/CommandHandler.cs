@@ -67,28 +67,11 @@ namespace ProtoBox.Console
             {
                 if (commands[i].Name == tokens[0])
                 {
-                    commands[i].Run(tokens);
+                    commands[i].Execute(tokens);
                     return true;
                 }
             }
             return false;
         }
-
-        //private static IEnumerable<T> GetEnumerableOfType<T>(params object[] constructorArgs) where T : class
-        //{
-        //    // New list
-        //    List<T> objects = new List<T>();
-        //
-        //    // Find all ConsoleCommand classes in all assemblies
-        //    Type[] types = Assembly.GetAssembly(typeof(T)).GetTypes().Where(
-        //            myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))
-        //        ).ToArray();
-        //
-        //    for (int i = 0; i < types.Length; i++)
-        //    {
-        //        objects.Add((T)Activator.CreateInstance(types[i], constructorArgs));
-        //    }
-        //    return objects;
-        //}
     }
 }
