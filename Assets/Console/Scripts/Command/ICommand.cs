@@ -204,18 +204,18 @@ namespace ProtoBox.Console.Commands
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>
         /// <returns></returns>
-        protected T StringToEnum<T>(string arg) 
+        protected T StringToEnum<T>(string arg)
         {
             Type type = typeof(T);
 
             Assert(!type.IsEnum, string.Format(ERR_NOT_ENUM, type.Name));
-            
+
             string[] names = Enum.GetNames(type);
 
             bool success = false;
             for (int i = 0; i < names.Length; i++)
             {
-                if (arg.Equals(names[i],StringComparison.OrdinalIgnoreCase))
+                if (arg.Equals(names[i], StringComparison.OrdinalIgnoreCase))
                 {
                     arg = names[i];
                     success = true;
@@ -225,6 +225,37 @@ namespace ProtoBox.Console.Commands
 
             Assert(!success, string.Format(ERR_INVALID_ARG, arg, FormatMultiple(names)));
             return (T)TypeDescriptor.GetConverter(type).ConvertFromString(arg);
+        }
+
+        /// <summary>
+        /// Returns parameter from subcommand. When the parameter does not exist it returns null;
+        /// </summary>
+        /// <param name="subcommand">name of subcommand</param>
+        /// <param name="param">index of parameter</param>
+        /// <returns>parameter of subcommand</returns>
+        public Param GetParam(string subcommand, int param)
+        {
+            // If we are negative
+            // we return null anyway.
+            if (param < 0)
+                return null;
+
+            // Find subcommand
+            for (int i = 0; i < Commands.Length; i++)
+            {
+                if (Commands[i].name.Equals(subcommand, StringComparison.OrdinalIgnoreCase))
+                {
+                    // if we are out of bounds
+                    if (param >= Commands[i].parameters.Length)
+                        break;
+                    
+                    // return
+                    return Commands[i].parameters[i];
+                }
+            }
+
+            // If there was no param found, return null.
+            return null;
         }
 
         /// <summary>
@@ -255,8 +286,8 @@ namespace ProtoBox.Console.Commands
         {
             m_SubCommands = new SubCommand[] {
                 new SubCommand(
-                    "scale", 
-                    new string[] { "s", "sc" }, 
+                    "scale",
+                    new string[] { "s", "sc" },
                     new Param[] { new Param(typeof(int), "time scale") },
                     SetTimeScale)
             };
