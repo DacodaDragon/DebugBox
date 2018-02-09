@@ -1,14 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using ProtoBox.Console;
+using ProtoBox.Console.ParameterHandling;
 
 public class Console : MonoBehaviour
 {
-    [SerializeField] private List<LogMessage> m_logElements;
-    [SerializeField] private List<LogMessage> m_activeMessages;
+    [SerializeField]
+    private List<LogMessage> m_logElements;
+    [SerializeField]
+    private List<LogMessage> m_activeMessages;
 
-    [SerializeField] bool m_collapse;
-    [SerializeField] ConsoleInput m_text;
+    [SerializeField]
+    bool m_collapse;
+    [SerializeField]
+    ConsoleInput m_text;
+    private ParamHandler paramhandler = new ParamHandler();
     private int m_logIndex = 0;
 
     public void Awake()
@@ -25,13 +31,28 @@ public class Console : MonoBehaviour
     }
 
     public void Start()
-    { 
+    {
         Application.logMessageReceived += RecieveLogMessage;
         Debug.Log("DACODA CONSOLE. Press \"~\" to open the console. Type help for a list of available commands.");
+
+        paramhandler.OnParamHandled += (System.Type t, object value) =>
+        {
+            Debug.LogWarning("convert: " + t.Name + " " + ((string[]) value)[0].ToString());
+        };
     }
 
+    bool t = true;
     public void Update()
     {
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            paramhandler.DisplayParam(new ProtoBox.Console.Commands.Param(typeof(Resolution[]), "wow", Screen.resolutions));
+            paramhandler.DisplayParam(new ProtoBox.Console.Commands.Param(typeof(int[]), "wow", new int[] { 1, 2, 3, 4 }));
+            paramhandler.DisplayParam(new ProtoBox.Console.Commands.Param(typeof(float[]), "wow", new float[] { 1.1f, 2.2f, 3.3f, 4.4f }));
+        }
+
+
         if (Input.GetKeyUp(KeyCode.BackQuote))
             m_text.gameObject.SetActive(true);
 
