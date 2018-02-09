@@ -9,7 +9,7 @@ namespace ProtoBox.Console
     {
         private const string ERROR_UNKNOWN_COMMAND = "Uknown command: \"{0}\". type \"help\" for a list of available commands.";
 
-        List<Commands.ConsoleCommand> commands = new List<ConsoleCommand>();
+        List<ConsoleCommand> commands = new List<ConsoleCommand>();
         public void Load()
         {
             commands.Add(new QuitCommand());
@@ -72,6 +72,47 @@ namespace ProtoBox.Console
             }
             sb.Append(']');
             return sb.ToString();
+        }
+
+        public string[] GetSubCommandNames(string command)
+        {
+            string[] subCommandNames;
+            for (int i = 0; i < commands.Count; i++)
+            {
+                if (commands[i].Name == command)
+                {
+                    subCommandNames = new string[commands[i].Commands.Length];
+                    for (int j = 0; j < commands[i].Commands.Length; j++)
+                    {
+                        subCommandNames[j] = commands[i].Commands[j].name;
+                    }
+                    return subCommandNames;
+                }
+            }
+
+            return null;
+        }
+
+        public string[] GetCommandNames()
+        {
+            string[] commandNames = new string[commands.Count];
+            for (int i = 0; i < commands.Count; i++)
+            {
+                commandNames[i] = commands[i].Name;
+            }
+            return commandNames;
+        }
+
+        public Param GetParam(string command, string subcommand, int param)
+        {
+            for (int i = 0; i < commands.Count; i++)
+            {
+                if (commands[i].Name == command)
+                {
+                    return commands[i].GetParam(subcommand, param);
+                }
+            }
+            return null;
         }
     }
 }
