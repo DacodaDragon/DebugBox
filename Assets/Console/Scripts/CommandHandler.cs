@@ -7,9 +7,8 @@ namespace ProtoBox.Console
 {
     public class CommandHandler
     {
-        private const string ERROR = "Uknown command: \"{0}\". type \"help\" for a list of available commands.";
+        private const string ERROR_UNKNOWN_COMMAND = "Uknown command: \"{0}\". type \"help\" for a list of available commands.";
 
-        
         List<Commands.ConsoleCommand> commands = new List<ConsoleCommand>();
         public void Load()
         {
@@ -24,19 +23,8 @@ namespace ProtoBox.Console
         {
             if (!TryParse(command))
             {
-                throw new Exception(string.Format(ERROR, command));
+                throw new Exception(string.Format(ERROR_UNKNOWN_COMMAND, command));
             }
-        }
-
-        public string GetFormattedCommandList()
-        {
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            sb.Append(commands[0].Name);
-            for (int i = 1; i < commands.Count; i++)
-            {
-                sb.Append(" ").Append(commands[i].Name);
-            }
-            return sb.ToString();
         }
 
         private bool TryParse(string command)
@@ -72,6 +60,18 @@ namespace ProtoBox.Console
                 }
             }
             return false;
+        }
+
+        public string GetFormattedCommandList()
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append('[').Append(commands[0].Name);
+            for (int i = 1; i < commands.Count; i++)
+            {
+                sb.Append(", ").Append(commands[i].Name);
+            }
+            sb.Append(']');
+            return sb.ToString();
         }
     }
 }
