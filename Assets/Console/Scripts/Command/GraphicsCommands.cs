@@ -14,27 +14,31 @@ namespace ProtoBox.Console.Commands
 
         private void SetAA(string[] args)
         {
+            Assert(args.Length < 3, ERR_INVALID_ARG_COUNT);
             QualitySettings.antiAliasing = ParseInt(args[2]);
         }
 
         private void SetVSync(string[] args)
         {
+            Assert(args.Length < 3, ERR_INVALID_ARG_COUNT);
             QualitySettings.vSyncCount = ParseInt(args[2]);
         }
 
         private void SetShadowQuality(string[] args)
         {
+            Assert(args.Length < 3, ERR_INVALID_ARG_COUNT);
             QualitySettings.shadows = StringToEnum<ShadowQuality>(args[2]);
         }
 
         private void SetAnsio(string[] args)
         {
-            QualitySettings.anisotropicFiltering = StringToEnum<AnisotropicFiltering>(args[2]);//StrToAniso(args[2]);
-            
+            Assert(args.Length < 3, ERR_INVALID_ARG_COUNT);
+            QualitySettings.anisotropicFiltering = StringToEnum<AnisotropicFiltering>(args[2]);
         }
 
         private void SetQualityLevel(string[] args)
         {
+            Assert(args.Length < 3, ERR_INVALID_ARG_COUNT);
             QualitySettings.SetQualityLevel(ParseInt(args[2]), true);
             Debug.Log("Quality set to: \"" + QualitySettings.names[QualitySettings.GetQualityLevel()] + "\"");
         }
@@ -58,7 +62,7 @@ namespace ProtoBox.Console.Commands
                 new SubCommand("setaa",                 new string[] { "aa" },                             new Param[] { new Param(typeof(int),           "AntiAliasing level") }, SetAA),
                 new SubCommand("setvsync",              new string[] { "vsync", "v" },                     new Param[] { new Param(typeof(int),           "vsync count") }, SetVSync),
                 new SubCommand("setshadowquality",      new string[] { "shadowquality", "shadow", "shq" }, new Param[] { new Param(typeof(ShadowQuality), "ShadowQuality") }, SetShadowQuality),
-                new SubCommand("setqualitylevel",       new string[] { "qualitylevel", "quality", "q" },   new Param[] { new Param(typeof(int),           "Quality Level") }, SetShadowQuality),
+                new SubCommand("setqualitylevel",       new string[] { "qualitylevel", "quality", "q" },   new Param[] { new Param(typeof(int),           "Quality Level") }, SetQualityLevel),
                 new SubCommand("increasequalitylevel",  new string[] { "increasequality", "iq" },          null , IncreaseQualityLevel),
                 new SubCommand("decreasequalitylevel",  new string[] { "decreasequality", "dq" },          null , DecreaseQualityLevel)
             };
